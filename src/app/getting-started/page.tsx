@@ -1,0 +1,13 @@
+import { handoffItems } from '@/content/site';
+import { pageMetadata } from '@/lib/metadata';
+export const metadata = pageMetadata('Getting Started', 'Generic account-access and project preparation guidance for agreed implementation projects.', '/getting-started', true);
+const sections = [
+  ['contacts', 'Agree on the contacts', 'Identify who approves scope and deliverables, who can grant account access, and which developer owns website changes. Confirm the communication and approval process.'],
+  ['access', 'Invite account access', 'Use each platform’s invitation and permission system. Agree on the specific role required for the task, which account to invite, and when access will be removed. Avoid sharing passwords or granting broad administrator access by default.'],
+  ['specifications', 'Share the technical materials', 'Provide the agreed tag specifications, event definitions, required parameters, vendor documentation and test journeys through the project’s private workflow.'],
+  ['deployment', 'Coordinate the environments', 'Confirm staging and production access, deployment ownership, release windows and how changes can be rolled back. Arrange representative test actions without exposing customer data.'],
+  ['consent', 'Confirm consent behavior', 'Supply your approved consent requirements and identify the person responsible for decisions. The implementation and tests should follow those agreed requirements.'],
+];
+export default function GettingStarted() {
+  return <div className="container page-body"><div className="page-intro"><span className="eyebrow">For agreed projects</span><h1>Ready to get started.</h1><p>A few practical steps to give the implementation a clear starting point.</p></div><article className="reading"><p>This is a general guide. Project-specific access, approvals and materials belong in the agreed private workflow. Don’t send passwords, tokens, customer exports or account IDs through this public website.</p><nav aria-label="Guide contents"><ol>{sections.map(([id, title]) => <li key={id}><a href={`#${id}`}>{title}</a></li>)}<li><a href="#handoff">Review the handoff</a></li></ol></nav>{sections.map(([id, title, text], index) => <section id={id} key={id}><h2>{index + 1}. {title}</h2><p>{text}</p></section>)}<section id="handoff"><h2>6. Review the handoff</h2><p>At completion, review the agreed deliverables and test scope together. Your handoff can include:</p><ul>{handoffItems.map(item => <li key={item}>{item}</li>)}</ul><p>Confirm ownership of the configuration and any hosting or subscription services, and remove temporary access when it is no longer needed.</p></section></article></div>;
+}

@@ -1,0 +1,16 @@
+.icon { position: relative; display: inline-flex; flex-shrink: 0; vertical-align: middle; }
+.icon[data-open=true] { z-index: 5; }
+.trigger { display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; cursor: help; }
+/* Keep the pointer over the same hover target while crossing to the label. */
+.icon::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 12px; }
+.tooltip { position: absolute; z-index: 10; bottom: calc(100% + 10px); right: 0; width: max-content; max-width: 210px; padding: 8px 12px; border-radius: 7px; background: var(--ink); color: var(--surface); font-size: 12px; font-weight: 500; line-height: 18px; text-align: center; white-space: normal; box-shadow: 0 4px 12px rgb(7 61 51 / .12); pointer-events: none; opacity: 0; visibility: hidden; transform: translateY(4px); transition: opacity 140ms ease-out, transform 140ms ease-out, visibility 0s linear 140ms; }
+.tooltip::after { content: ''; position: absolute; right: 8px; bottom: -4px; width: 8px; height: 8px; background: var(--ink); transform: rotate(45deg); }
+.icon[data-open=true] .tooltip { pointer-events: auto; opacity: 1; visibility: visible; transform: translateY(0); transition-delay: 0s; }
+@media (max-width: 767px) {
+  .tooltip { max-width: 190px; }
+  .icon[data-mobile-align=start] .tooltip { left: -8px; right: auto; }
+  .icon[data-mobile-align=start] .tooltip::after { left: 15px; right: auto; }
+  .icon[data-mobile-align=center] .tooltip { left: 50%; right: auto; transform: translate(-50%, 4px); }
+  .icon[data-mobile-align=center][data-open=true] .tooltip { transform: translate(-50%, 0); }
+  .icon[data-mobile-align=center] .tooltip::after { left: calc(50% - 4px); right: auto; }
+}

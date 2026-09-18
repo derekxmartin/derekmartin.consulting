@@ -1,0 +1,9 @@
+import Link from 'next/link';
+import { Arrow } from '@/components/Arrow';
+import { Closing } from '@/components/Closing';
+import { pageMetadata } from '@/lib/metadata';
+import styles from '@/components/pages.module.css';
+export const metadata = pageMetadata('About', 'Meet Derek Martin, a specialist in ad operations and tracking implementation with eight years of digital marketing experience.', '/about');
+export default function About() {
+  return <div className="container"><div className="page-intro"><span className="eyebrow">About</span><h1>Hi, I’m Derek.</h1></div><div className={styles.about}><div className={styles.aboutArticle}><p>I help agencies and independent marketers get the technical side of tracking implemented, tested and handed over.</p><p>My background includes eight years in digital marketing, with experience at Metric Theory, Wpromote and Ask.com. I’ve worked hands-on with tagging, analytics, APIs, scripts, SQL and reporting.</p><p>I understand the space between a client request, a platform’s specifications and the website where it all needs to work. My role is to take ownership of a defined implementation and make the result straightforward for your team to use.</p><p>We agree on what needs to be built, what success looks like and who owns each dependency. I complete the work, document the tests and hand it back.</p><Link href="/contact" className="text-link">Tell me about your project <Arrow /></Link></div><aside className={styles.aboutRail}><h2>Built for collaboration.</h2><p>Work directly with me on the agreed technical scope, alongside your account team, media practitioner or developer.</p><hr /><h2>A project with an endpoint.</h2><p>Implementation, verification and a documented handoff. New requirements can become a separately scoped project.</p></aside></div><Closing /></div>;
+}

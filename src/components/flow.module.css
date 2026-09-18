@@ -1,0 +1,99 @@
+.figure { width: 100%; max-width: 628px; justify-self: end; }
+.diagram { --flow-duration: 6s; --halo-expansion: 1.14; position: relative; width: 100%; aspect-ratio: 628/430; }
+.field { position: absolute; inset: 6% 0 6% 24px; background: var(--mint); border-radius: 24px; overflow: hidden; pointer-events: none; }
+/* A quiet second mint tone moves underneath the static routing illustration. */
+.field::before, .field::after { content: ''; position: absolute; width: 65%; height: 95%; border-radius: 80px; pointer-events: none; }
+.field::before { top: -48%; right: -12%; background: var(--mint-strong); opacity: .65; }
+.field::after { bottom: -62%; left: -15%; border: 1px solid var(--accent); opacity: .55; }
+@keyframes mint-field-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-48px, 32px, 0); }
+}
+@keyframes mint-contour-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(38px, -28px, 0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .field::before { animation: mint-field-drift 14s ease-in-out -4s infinite; }
+  .field::after { animation: mint-contour-drift 18s ease-in-out -6s infinite; }
+}
+@media (prefers-reduced-motion: reduce) { .field::before, .field::after { animation: none; } }
+.lines { position: absolute; width: 100%; height: 100%; inset: 0; overflow: visible; }
+.node { position: relative; display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-size: 13px; line-height: 20px; font-weight: 550; min-height: 62px; padding: 16px; }
+.source, .config { position: absolute; top: 39.07%; min-height: 14.42%; }
+.source { --pulse-delay: 1.08s; left: 0; width: 23.25%; padding-inline: 7px; gap: 6px; justify-content: center; }
+.config { --pulse-delay: 2.04s; left: 29.14%; width: 27.07%; padding-inline: 12px; gap: 9px; }
+.config svg { flex-shrink: 0; }
+.dot { width: 6px; height: 6px; background: #3EAD84; border-radius: 50%; flex-shrink: 0; }
+.destinations { position: absolute; left: 71.34%; right: 0; top: 14.42%; bottom: 21.86%; display: flex; flex-direction: column; justify-content: space-between; }
+.destination { --pulse-delay: 3.66s; min-height: 62px; }
+.platformDestination { justify-content: center; }
+.platformLogos { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.platformLogos svg { display: block; width: 22px; height: 22px; flex-shrink: 0; }
+.measurementLogo { display: block; width: 26px; height: 26px; flex-shrink: 0; }
+.figure figcaption { margin-top: 8px; font-size: 12px; line-height: 20px; color: var(--muted); text-align: right; }
+.eventTicker, .mobileSource, .mobileBranches { display: none; }
+.eventTicker { position: relative; flex: 0 0 auto; width: calc(13ch + 2px); height: 20px; font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: 11px; font-weight: 500; line-height: 20px; }
+.typedEvent { position: absolute; left: 0; top: 0; width: 0; height: 20px; overflow: hidden; white-space: nowrap; border-right: 1px solid var(--ink); box-sizing: content-box; opacity: 0; }
+.pulseHalo { position: absolute; inset: -1px; border: 1.5px solid #3EAD84; border-radius: inherit; opacity: 0; pointer-events: none; }
+.sourcePulse, .branchPulse { stroke: #249D73; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 18 140; stroke-dashoffset: 20; opacity: 0; }
+/* Four six-second event examples share the same send / configure / receive rhythm. */
+@keyframes event-type {
+  0% { width: 0; opacity: 1; }
+  4%, 19% { width: calc(var(--characters) * 1ch); opacity: 1; }
+  23%, 24.99% { width: 0; opacity: 1; }
+  25%, 100% { width: 0; opacity: 0; }
+}
+@keyframes event-caret { 0%, 100% { border-right-color: var(--ink); } 50% { border-right-color: transparent; } }
+@keyframes source-transfer {
+  0%, 23% { stroke-dashoffset: 20; opacity: 0; }
+  23.01% { stroke-dashoffset: 20; opacity: 1; }
+  34% { stroke-dashoffset: -100; opacity: 1; }
+  34.01%, 100% { stroke-dashoffset: -100; opacity: 0; }
+}
+@keyframes branch-transfer {
+  0%, 41% { stroke-dashoffset: 20; opacity: 0; }
+  41.01% { stroke-dashoffset: 20; opacity: 1; }
+  61% { stroke-dashoffset: -100; opacity: 1; }
+  61.01%, 100% { stroke-dashoffset: -100; opacity: 0; }
+}
+@keyframes node-bloom {
+  0% { transform: scale(1); opacity: 0; }
+  2% { transform: scale(1.015, 1.04); opacity: .7; }
+  19%, 100% { transform: scale(var(--halo-expansion), 1.32); opacity: 0; }
+}
+@keyframes node-energize {
+  0%, 22%, 100% { background-color: var(--surface); border-color: var(--line); }
+  5% { background-color: #E0F3E9; border-color: #69BC99; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .staticEvent { display: none; }
+  .eventTicker { display: block; }
+  .typedEvent { animation: event-type 24s steps(var(--characters), end) var(--event-delay) infinite, event-caret .8s step-end infinite; }
+  .sourcePulse { animation: source-transfer var(--flow-duration) linear infinite; }
+  .branchPulse { animation: branch-transfer var(--flow-duration) linear infinite; }
+  .node { animation: node-energize var(--flow-duration) ease-out var(--pulse-delay) infinite; }
+  .pulseHalo { animation: node-bloom var(--flow-duration) ease-out var(--pulse-delay) infinite; }
+}
+@media (min-width: 1024px) and (max-width: 1199px) { .node { padding: 12px 8px; font-size: 12px; gap: 6px; min-height: 54px; } .config { width: 30%; } .destinations { left: 72%; } }
+@media (min-width: 1024px) and (max-width: 1199px) { .source { padding-inline: 6px; gap: 5px; } .eventTicker { font-size: 10px; } }
+@media (max-width: 1023px) and (min-width: 768px) { .figure { justify-self: center; } }
+@media (max-width: 767px) {
+  .figure { max-width: none; }
+  .diagram { --halo-expansion: 1.06; aspect-ratio: auto; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+  .field { inset: 0; border-radius: 18px; }
+  .lines { display: none; }
+  .node { min-height: 48px; font-size: 13px; padding: 12px 14px; }
+  .source, .config { position: relative; top: auto; left: auto; width: 100%; justify-content: center; }
+  .eventTicker { font-size: 12px; }
+  .mobileSource { display: block; position: absolute; top: 100%; left: calc(50% - 2px); width: 4px; height: 24px; overflow: visible; }
+  .destinations { position: relative; inset: auto; width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mobileBranches { display: block; position: absolute; top: -24px; left: 0; width: 100%; height: 24px; overflow: visible; }
+  .destination { padding: 10px 4px; min-width: 0; justify-content: center; text-align: center; gap: 0; font-size: 12px; }
+  .measurementLogo { width: 22px; height: 22px; }
+  .platformLogos { gap: 7px; }
+  .platformLogos svg { width: 16px; height: 16px; }
+  .figure figcaption { margin-top: 12px; text-align: left; }
+}
+@media (max-width: 359px) { .diagram { padding: 20px 16px; } .destination { font-size: 12px; } }
+@media (max-width: 359px) { .platformLogos { gap: 6px; } .platformLogos svg { width: 14px; height: 14px; } }

@@ -1,0 +1,6 @@
+:root {
+  --canvas: #FBFCFA; --surface: #FFFFFF; --ink: #073D33; --body: #253E37;
+  --muted: #596B64; --mint: #EDF6F0; --mint-strong: #D9EEE2; --accent: #94CFB3;
+  --line: #D3E1D9; --control-border: #7C9588; --focus: #145E49;
+  --error: #A52B2B; --hover-ink: #0D5143;
+}
