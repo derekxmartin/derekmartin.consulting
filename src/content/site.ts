@@ -11,7 +11,7 @@ export const site = {
   pricingText: 'Projects are scoped and quoted based on the implementation.',
   portfolioEmptyText: 'Public work examples are being prepared. In the meantime, tell me what you need implemented and we can talk through the approach.',
   correctionPolicyText: 'Defect correction follows the agreed project terms. Later changes can be scoped as a new project.',
-  privacyContentApproved: false,
+  privacyContentApproved: true,
   analyticsEnabled: true,
 };
 
