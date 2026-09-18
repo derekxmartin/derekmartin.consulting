@@ -6,7 +6,7 @@ export const site = {
   publicPhone: '(510) 981-9531',
   phoneHref: 'tel:+15109819531',
   socialLinks: [{ label: 'LinkedIn', url: 'https://www.linkedin.com/in/derekmartinoscp' }],
-  responseWindowText: '',
+  responseWindowText: 'I typically respond within 1–2 business days.',
   availabilityText: '',
   pricingText: 'Projects are scoped and quoted based on the implementation.',
   portfolioEmptyText: 'Public work examples are being prepared. In the meantime, tell me what you need implemented and we can talk through the approach.',

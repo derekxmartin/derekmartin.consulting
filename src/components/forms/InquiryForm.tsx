@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useSubmit } from '@formspree/react';
 import { useRef, useState, type ReactNode, type FormEvent } from 'react';
 import { services, serviceTitle } from '@/content/services';
+import { site } from '@/content/site';
 import { inquirySchema, fieldErrors, timingOptions, type Submission } from '@/lib/inquiries/schema';
 import { track } from '@/lib/analytics/events';
 import { Arrow } from '../Arrow';
@@ -92,6 +93,7 @@ export function InquiryForm({ service, mock, publicEmail, formspreeId = '' }: { 
   if (status === 'success') return <div data-inquiry-status="success" className={styles.form} role="status" tabIndex={-1} ref={element => element?.focus()}>
     <span className="eyebrow">Project request received</span><h2>Thanks for the details.</h2>
     <p>Your project request has been accepted. I’ll review the details and follow up about the scope and next steps.</p>
+    <p>{site.responseWindowText}</p>
     <div className="actions"><Link className="button" href="/how-it-works">What happens next <Arrow /></Link></div>
   </div>;
   return <form ref={formRef} className={styles.form} onSubmit={submit} noValidate onChange={() => {
