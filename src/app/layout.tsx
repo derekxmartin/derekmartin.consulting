@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { Analytics } from '@/components/analytics/Analytics';
 import { origin, pageTitle, titleBrand } from '@/lib/metadata';
 import '@/styles/globals.css';
 
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
   },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const analyticsEnabled = process.env.VERCEL_ENV === 'production' || process.env.ANALYTICS_TEST === '1';
   return <html lang="en" className={manrope.variable}><body>
     <div className="ambient-background" aria-hidden="true">
       <svg className="ambient-routes ambient-routes-right" viewBox="0 0 360 680" fill="none" focusable="false">
@@ -32,6 +34,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <path className="ambient-signal" pathLength="100" d="M0 40H72Q104 40 104 72V180Q104 212 136 212H152Q184 212 184 244V336Q184 368 152 368H0" />
       </svg>
     </div>
-    <a className="skip-link" href="#main-content">Skip to content</a><Header /><main id="main-content" tabIndex={-1}>{children}</main><Footer />
+    <a className="skip-link" href="#main-content">Skip to content</a><Header /><main id="main-content" tabIndex={-1}>{children}</main><Footer analyticsEnabled={analyticsEnabled} />{analyticsEnabled && <Analytics />}
   </body></html>;
 }

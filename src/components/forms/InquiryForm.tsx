@@ -66,7 +66,7 @@ export function InquiryForm({ service, mock, publicEmail, formspreeId = '' }: { 
         const unknown = result.getFormErrors().some(item => item.code === 'UNSPECIFIED');
         setMessage(unknown ? 'I couldn’t confirm that your request was sent. Your details are still here.' : result.getFormErrors().map(item => item.message).join('. ') || 'Please check your details and try again.');
         setStatus(unknown ? 'uncertain' : 'error');
-        track('form_error', { form_id: 'project-inquiry', error_category: 'delivery' });
+        track('form_error', { form_id: 'project-inquiry', error_category: unknown ? 'uncertain' : 'unavailable' });
         requestAnimationFrame(() => summaryRef.current?.focus());
         return;
       }

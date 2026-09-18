@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { navigation, site } from '@/content/site';
 import styles from './layout.module.css';
-export function Footer() {
+import { AnalyticsPreferencesLink } from '@/components/analytics/Analytics';
+export function Footer({ analyticsEnabled = false }: { analyticsEnabled?: boolean }) {
   return <footer className={`container ${styles.footer}`}>
     <div className={styles.footerMain}>
       <div className={styles.footerBrand}><Link href="/" className={styles.footerName}>{site.displayName}</Link><p>{site.descriptor}</p></div>
@@ -22,6 +23,6 @@ export function Footer() {
         </div>
       </div>
     </div>
-    <div className={styles.footerBottom}><p>© {new Date().getFullYear()} {site.displayName}</p><Link href="/privacy">Privacy notice</Link></div>
+    <div className={styles.footerBottom}><p>© {new Date().getFullYear()} {site.displayName}</p><div className={styles.footerPolicies}>{analyticsEnabled && <AnalyticsPreferencesLink />}<Link href="/privacy">Privacy notice</Link></div></div>
   </footer>;
 }

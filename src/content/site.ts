@@ -12,7 +12,7 @@ export const site = {
   portfolioEmptyText: 'Public work examples are being prepared. In the meantime, tell me what you need implemented and we can talk through the approach.',
   correctionPolicyText: 'Defect correction follows the agreed project terms. Later changes can be scoped as a new project.',
   privacyContentApproved: false,
-  analyticsEnabled: false,
+  analyticsEnabled: true,
 };
 
 export const navigation = [

@@ -25,6 +25,7 @@
 .footerBottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
 .footerBottom a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; }
 .footerBottom a:hover { text-decoration: underline; }
+.footerPolicies { display: flex; align-items: center; gap: 20px; }
 @media (max-width: 1023px) {
   .footerMain { grid-template-columns: 1fr 1fr; gap: 24px 40px; }
   .footerBrand { grid-column: 1 / -1; }
@@ -61,5 +62,6 @@
   .footerMain { grid-template-columns: 1fr; gap: 28px; }
   .footerBrand { grid-column: auto; }
   .footerHeading { margin-top: 0; }
+  .footerBottom { flex-wrap: wrap; }
   .footerNav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
 }
