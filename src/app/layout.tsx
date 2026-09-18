@@ -9,7 +9,14 @@ const manrope = localFont({ src: '../../fonts/manrope-latin.woff2', weight: '200
 export const metadata: Metadata = {
   metadataBase: new URL(origin()), title: { default: pageTitle('Home'), template: `%s | ${titleBrand}` },
   description: 'Ad tags, Floodlight and analytics implementation for agencies and independent marketers. Scoped, tested and ready to hand off.',
-  icons: { icon: '/favicon.svg' },
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=2', sizes: '16x16 32x32 48x48' },
+      { url: '/favicon-32.png?v=2', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon.svg?v=2', type: 'image/svg+xml', sizes: 'any' },
+    ],
+    apple: { url: '/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' },
+  },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en" className={manrope.variable}><body>
