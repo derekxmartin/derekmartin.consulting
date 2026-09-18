@@ -1,8 +1,9 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSubmit } from '@formspree/react';
 import { useRef, useState, type ReactNode, type FormEvent } from 'react';
-import { services } from '@/content/services';
+import { services, serviceTitle } from '@/content/services';
 import { inquirySchema, fieldErrors, timingOptions, type Submission } from '@/lib/inquiries/schema';
 import { track } from '@/lib/analytics/events';
 import { Arrow } from '../Arrow';
@@ -11,9 +12,10 @@ import styles from './form.module.css';
 function Field({ id, label, optional, hint, error, children }: { id: string; label: string; optional?: boolean; hint?: string; error?: string; children: ReactNode }) {
   return <div className={styles.field}><label htmlFor={id}>{label} <span>{optional ? '(optional)' : '(required)'}</span></label>{children}{hint && <p className={styles.hint} id={`${id}-hint`}>{hint}</p>}{error && <p className={styles.fieldError} id={`${id}-error`}>{error}</p>}</div>;
 }
-type State = 'idle' | 'submitting' | 'uncertain' | 'error';
-export function InquiryForm({ service, mock, publicEmail }: { service: string; mock: boolean; publicEmail: string }) {
+type State = 'idle' | 'submitting' | 'uncertain' | 'error' | 'success';
+export function InquiryForm({ service, mock, publicEmail, formspreeId = '' }: { service: string; mock: boolean; publicEmail: string; formspreeId?: string }) {
   const router = useRouter();
+  const submitToFormspree = useSubmit(formspreeId);
   const formRef = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
   const started = useRef(false);
@@ -42,6 +44,32 @@ export function InquiryForm({ service, mock, publicEmail }: { service: string; m
     if (!attempt.current || attempt.current.value !== value) attempt.current = { value, payload: { submissionId: crypto.randomUUID(), submittedAt: new Date().toISOString(), honeypot: String(raw.extraField || ''), inquiry: validation.data } };
     submitting.current = true; setStatus('submitting'); setMessage('Sending your project request…');
     try {
+      if (formspreeId) {
+        const payload = attempt.current.payload;
+        let timeout: ReturnType<typeof setTimeout> | undefined;
+        const result = await Promise.race([submitToFormspree({
+          ...payload.inquiry, service: serviceTitle(payload.inquiry.service),
+          message: payload.inquiry.description, _gotcha: payload.honeypot,
+          subject: 'Project request from derekmartin.consulting',
+          submissionId: payload.submissionId, submittedAt: payload.submittedAt,
+        }), new Promise<never>((_, reject) => { timeout = setTimeout(() => reject(new Error('Delivery confirmation timed out')), 20000); })]).finally(() => clearTimeout(timeout));
+        if (result.kind === 'success') {
+          track('generate_lead', { form_id: 'project-inquiry', service_id: validation.data.service });
+          setStatus('success'); return;
+        }
+        const providerErrors: Record<string, string> = {};
+        for (const [field, items] of result.getAllFieldErrors()) {
+          const key = field === 'message' ? 'description' : String(field);
+          if (key in validation.data) providerErrors[key] = items.map(item => item.message).join('. ');
+        }
+        setErrors(providerErrors);
+        const unknown = result.getFormErrors().some(item => item.code === 'UNSPECIFIED');
+        setMessage(unknown ? 'I couldn’t confirm that your request was sent. Your details are still here.' : result.getFormErrors().map(item => item.message).join('. ') || 'Please check your details and try again.');
+        setStatus(unknown ? 'uncertain' : 'error');
+        track('form_error', { form_id: 'project-inquiry', error_category: 'delivery' });
+        requestAnimationFrame(() => summaryRef.current?.focus());
+        return;
+      }
       const response = await fetch('/api/inquiries', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(attempt.current.payload), signal: AbortSignal.timeout(20000) });
       const result = await response.json();
       if (response.ok && result.ok === true) {
@@ -61,12 +89,17 @@ export function InquiryForm({ service, mock, publicEmail }: { service: string; m
       requestAnimationFrame(() => summaryRef.current?.focus());
     } finally { submitting.current = false; }
   }
+  if (status === 'success') return <div className={styles.form} role="status" tabIndex={-1} ref={element => element?.focus()}>
+    <span className="eyebrow">Project request received</span><h2>Thanks for the details.</h2>
+    <p>Your project request has been accepted. I’ll review the details and follow up about the scope and next steps.</p>
+    <div className="actions"><Link className="button" href="/how-it-works">What happens next <Arrow /></Link></div>
+  </div>;
   return <form ref={formRef} className={styles.form} onSubmit={submit} noValidate onChange={() => {
     if (!started.current) { started.current = true; if (!mock) track('form_start', { form_id: 'project-inquiry' }); }
   }}>
     {mock && <div className={`notice ${styles.mockNotice}`}>Local test mode. This form simulates delivery; no email is sent.</div>}
     <div className={styles.srOnly} role="status" aria-live="polite">{status === 'submitting' ? message : ''}</div>
-    {message && status !== 'submitting' && <div className={styles.errorSummary} ref={summaryRef} tabIndex={-1} role="alert"><p>{message}</p>{Object.keys(errors).length > 0 && <ul>{Object.entries(errors).map(([key, error]) => <li key={key}><a href={`#${key}`} onClick={event => { event.preventDefault(); document.getElementById(key)?.focus(); }}>{error}</a></li>)}</ul>}{status === 'uncertain' && <p>Retrying uses the same request reference and details to prevent a duplicate notification.</p>}{publicEmail && <p>You can also <a href={`mailto:${publicEmail}`}>email {publicEmail}</a>.</p>}</div>}
+    {message && status !== 'submitting' && <div className={styles.errorSummary} ref={summaryRef} tabIndex={-1} role="alert"><p>{message}</p>{Object.keys(errors).length > 0 && <ul>{Object.entries(errors).map(([key, error]) => <li key={key}><a href={`#${key}`} onClick={event => { event.preventDefault(); document.getElementById(key)?.focus(); }}>{error}</a></li>)}</ul>}{status === 'uncertain' && <p>{formspreeId ? 'Your request may already have arrived. Retrying could send a second copy.' : 'Retrying uses the same request reference and details to prevent a duplicate notification.'}</p>}{publicEmail && <p>You can also <a href={`mailto:${publicEmail}`}>email {publicEmail}</a>.</p>}</div>}
     <fieldset disabled={status === 'submitting' || status === 'uncertain'} className={styles.fields}>
       <legend className={styles.srOnly}>Project request details</legend>
       <div className={styles.row}>

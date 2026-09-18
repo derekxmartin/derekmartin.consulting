@@ -68,7 +68,7 @@ The route list is generated at build time. Rebuild after publishing a case. No C
 
 See [delivery setup and release checklist](docs/LAUNCH-CHECKLIST.md), [verification and design QA](docs/VERIFICATION.md), and [portfolio roadmap](docs/PORTFOLIO-ROADMAP.md).
 
-The real delivery adapter uses the [Resend email API](https://resend.com/docs/api-reference/emails/send-email). [Upstash rate limiting](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) and Redis provide shared abuse prevention and idempotency state. Neither service has been configured or contacted with live credentials.
+For the current Formspree integration, see [Formspree setup](docs/FORMSPREE.md). Set `FORMSPREE_FORM_ID` to enable it; no Resend or Redis configuration is needed for this path. The legacy delivery adapter uses the [Resend email API](https://resend.com/docs/api-reference/emails/send-email). [Upstash rate limiting](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) and Redis provide shared abuse prevention and idempotency state. Neither service has been configured or contacted with live credentials.
 
 ## Dependencies actually installed
 

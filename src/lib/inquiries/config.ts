@@ -1,6 +1,11 @@
 export function isMockDelivery(env: Record<string, string | undefined> = process.env): boolean {
   return env.INQUIRY_DELIVERY === 'mock' && env.NODE_ENV !== 'production' && env.VERCEL_ENV !== 'production';
 }
+// Form IDs are public routing identifiers, never API keys.
+export function formspreeId(env: Record<string, string | undefined> = process.env): string {
+  const value = env.FORMSPREE_FORM_ID?.trim() || '';
+  return /^[a-zA-Z0-9]{6,32}$/.test(value) ? value : '';
+}
 export function deliveryConfigured(env: Record<string, string | undefined> = process.env): boolean {
   return env.INQUIRY_DELIVERY === 'resend' && !!env.RESEND_API_KEY && !!env.CONTACT_FROM_EMAIL && !!env.CONTACT_TO_EMAIL &&
     (env.RECEIPT_SIGNING_SECRET?.length ?? 0) >= 32 && !!env.UPSTASH_REDIS_REST_URL && !!env.UPSTASH_REDIS_REST_TOKEN;
