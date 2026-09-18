@@ -89,7 +89,7 @@ export function InquiryForm({ service, mock, publicEmail, formspreeId = '' }: { 
       requestAnimationFrame(() => summaryRef.current?.focus());
     } finally { submitting.current = false; }
   }
-  if (status === 'success') return <div className={styles.form} role="status" tabIndex={-1} ref={element => element?.focus()}>
+  if (status === 'success') return <div data-inquiry-status="success" className={styles.form} role="status" tabIndex={-1} ref={element => element?.focus()}>
     <span className="eyebrow">Project request received</span><h2>Thanks for the details.</h2>
     <p>Your project request has been accepted. I’ll review the details and follow up about the scope and next steps.</p>
     <div className="actions"><Link className="button" href="/how-it-works">What happens next <Arrow /></Link></div>

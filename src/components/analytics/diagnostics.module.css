@@ -1,0 +1,6 @@
+.panel { position: fixed; z-index: 45; top: 96px; right: 12px; width: min(370px, calc(100% - 24px)); max-height: 48svh; overflow: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--canvas); box-shadow: 0 8px 32px rgb(7 61 51 / .16); color: var(--ink); font-size: 12px; }
+.panel summary { padding: 14px 16px; cursor: pointer; font-weight: 650; }
+.body { padding: 0 16px 16px; }
+.body pre { margin: 12px 0; font-size: 11px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; }
+.body button { min-height: 44px; padding: 10px 12px; border: 1px solid var(--ink); border-radius: 6px; color: var(--ink); background: var(--canvas); font: inherit; cursor: pointer; }
+.body p { margin: 8px 0; }

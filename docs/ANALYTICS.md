@@ -36,6 +36,8 @@ Only fixed public identifiers and categories enter custom events. Inquiry names,
 
 ## Verification
 
+For device-specific problems, open `/contact?analytics-debug=1`. The collapsible panel reports saved consent, the GA disable flag, script presence, GTM execution, queued form event counts and visible form success. Use **Copy diagnostic report** to share those values. It excludes form contents, cookie values, client IDs and request payloads. Resource timing counts are observations, not evidence of GA4 receipt; browsers may omit or limit them. This panel does not change consent, send events or submit the form.
+
 PowerShell (with Node/npm on PATH):
 
 ```powershell

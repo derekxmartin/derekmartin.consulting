@@ -27,7 +27,10 @@ test('accepted inquiry produces one safe lead event; failure produces none', asy
   await page.route('https://www.googletagmanager.com/**', route => route.fulfill({ contentType: 'text/javascript', body: '' }));
   let succeed = false;
   await page.route('https://formspree.io/**', route => route.fulfill({ status: succeed ? 200 : 422, json: succeed ? { ok: true, next: '/thanks' } : { errors: [{ field: 'email', code: 'TYPE_EMAIL', message: 'Check email' }] } }));
-  await page.goto('/contact?service=ga4-gtm');
+  await page.goto('/contact?service=ga4-gtm&analytics-debug=1');
+  const diagnostics = page.getByLabel('Tracking diagnostic report');
+  await expect(diagnostics).toContainText('"savedConsent": "unset"');
+  await page.getByText('Tracking diagnostics', { exact: true }).click();
   await page.getByRole('button', { name: 'Accept analytics' }).click();
   await page.locator('#name').fill('Private test name');
   await page.locator('#email').fill('private-test@example.com');
@@ -42,4 +45,11 @@ test('accepted inquiry produces one safe lead event; failure produces none', asy
   expect(JSON.parse(data).filter((item: {event?: string}) => item.event === 'generate_lead')).toHaveLength(1);
   expect(JSON.parse(data).filter((item: {event?: string}) => item.event === 'form_start')).toHaveLength(1);
   expect(data).not.toContain('Private'); expect(data).not.toContain('private-test@example.com');
+  await page.getByText('Tracking diagnostics', { exact: true }).click();
+  await expect(diagnostics).toContainText('"leadQueued": 1');
+  await expect(diagnostics).toContainText('"formSuccessVisible": true');
+  await expect(diagnostics).toContainText('"savedConsent": "accepted"');
+  await expect(diagnostics).toContainText('"gtmExecuted": false'); // Script is deliberately stubbed.
+  await expect(diagnostics).not.toContainText('Private');
+  await expect(diagnostics).not.toContainText('private-test@example.com');
 });
