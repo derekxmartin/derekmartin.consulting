@@ -5,7 +5,7 @@ export const site = {
   publicEmail: 'derekmartinsf@gmail.com',
   publicPhone: '(510) 981-9531',
   phoneHref: 'tel:+15109819531',
-  socialLinks: [] as { label: string; url: string }[],
+  socialLinks: [{ label: 'LinkedIn', url: 'https://www.linkedin.com/in/derekmartinoscp' }],
   responseWindowText: '',
   availabilityText: '',
   pricingText: 'Projects are scoped and quoted based on the implementation.',
