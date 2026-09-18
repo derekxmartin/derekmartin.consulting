@@ -3,6 +3,8 @@ export const site = {
   descriptor: 'Ad ops & tracking implementation',
   canonicalOrigin: 'https://derekmartin.consulting',
   publicEmail: 'derekmartinsf@gmail.com',
+  publicPhone: '(510) 981-9531',
+  phoneHref: 'tel:+15109819531',
   socialLinks: [] as { label: string; url: string }[],
   responseWindowText: '',
   availabilityText: '',
