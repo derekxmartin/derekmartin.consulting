@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>Derek Martin</title>
-  <rect width="64" height="64" rx="15" fill="#073D33"/>
-  <path d="M40 16v32H28c-7 0-12-5-12-12s5-12 12-12h12" fill="none" stroke="#F7FAF8" stroke-width="8" stroke-linejoin="round"/>
-  <rect x="47" y="12" width="8" height="8" rx="2" fill="#94CFB3"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Derek Martin</title><rect width="64" height="64" fill="#073D33" rx="15"/><path fill="none" stroke="#F7FAF8" stroke-linejoin="round" stroke-width="8" d="M40 16v32H28c-7 0-12-5-12-12s5-12 12-12h12"/><rect width="8" height="8" x="47" y="12" fill="#94CFB3" rx="2"/></svg>
