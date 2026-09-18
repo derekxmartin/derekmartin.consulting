@@ -2,7 +2,7 @@ export const site = {
   displayName: 'Derek Martin',
   descriptor: 'Ad ops & tracking implementation',
   canonicalOrigin: 'https://derekmartin.consulting',
-  publicEmail: '',
+  publicEmail: 'derekmartinsf@gmail.com',
   socialLinks: [] as { label: string; url: string }[],
   responseWindowText: '',
   availabilityText: '',
