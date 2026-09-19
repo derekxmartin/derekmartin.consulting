@@ -17,6 +17,7 @@ test('schema trims values, accepts personal email and normalizes a website', () 
   const result = inquirySchema.parse(inquiry);
   assert.equal(result.name, 'Test Person'); assert.equal(result.website, 'https://example.com/');
   assert.equal(result.budget, '');
+  assert.equal(inquirySchema.parse({ ...inquiry, website: 'HTTPS://EXAMPLE.COM/Contact?Ref=Campaign#Top' }).website, 'https://example.com/contact?ref=campaign#top');
 });
 test('required fields, lengths, invalid services, URLs and conditional dates are rejected', () => {
   for (const patch of [{ name: '' }, { email: 'bad' }, { description: 'too short' }, { name: 'a'.repeat(101) }, { platforms: 'a'.repeat(301) }, { service: 'untrusted-service' }, { website: 'javascript:alert(1)' }, { website: 'https://user:password@example.com' }, { timing: 'Specific date', desiredDate: '' }, { timing: 'Specific date', desiredDate: '2027-02-30' }]) assert.equal(inquirySchema.safeParse({ ...inquiry, ...patch }).success, false, JSON.stringify(patch));

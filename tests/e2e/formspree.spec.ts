@@ -3,7 +3,8 @@ import { test, expect, type Page } from '@playwright/test';
 async function fill(page: Page) {
   await page.locator('#name').fill('Form integration test');
   await page.locator('#email').fill('form-test@example.com');
-  await page.locator('#website').fill('example.com');
+  await page.locator('#website').fill('EXAMPLE.com/Contact?Ref=Campaign#Top');
+  await expect(page.locator('#website')).toHaveValue('example.com/contact?ref=campaign#top');
   await page.locator('#description').fill('Synthetic inquiry for intercepted integration testing.');
 }
 
@@ -14,7 +15,7 @@ test('validates, submits once, and confirms only after acceptance', async ({ pag
     expect(route.request().url()).toBe('https://formspree.io/f/testform');
     const payload = route.request().postDataJSON();
     expect(payload.email).toBe('form-test@example.com');
-    expect(payload.website).toBe('https://example.com/');
+    expect(payload.website).toBe('https://example.com/contact?ref=campaign#top');
     expect(payload.message).toContain('Synthetic inquiry');
     expect(payload._gotcha).toBe('');
     await new Promise(resolve => setTimeout(resolve, 300));
@@ -28,6 +29,7 @@ test('validates, submits once, and confirms only after acceptance', async ({ pag
   await page.getByRole('button', { name: 'Send project request' }).click();
   await expect(page.getByRole('button', { name: 'Sending…' })).toBeDisabled();
   await expect(page.getByRole('heading', { name: 'Thanks for the details.' })).toBeVisible();
+  await expect(page.getByText('Your project request has been received. I typically get back in 1-2 business days.', { exact: true })).toBeVisible();
   expect(requests).toBe(1);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Thanks for the details.' })).toHaveCount(0);

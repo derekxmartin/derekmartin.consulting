@@ -9,7 +9,7 @@ const website = optionalText(2048).transform((input, context) => {
     const url = new URL(value);
     if (!['http:', 'https:'].includes(url.protocol) || !url.hostname.includes('.') || url.username || url.password) throw new Error();
     if (url.href.length > 2048) throw new Error();
-    return url.href;
+    return url.href.toLowerCase();
   } catch { context.addIssue({ code: 'custom', message: 'Enter a valid website using http or https.' }); return z.NEVER; }
 });
 export const timingOptions = ['Flexible', 'Within a month', 'Within two weeks', 'Urgent', 'Specific date'] as const;

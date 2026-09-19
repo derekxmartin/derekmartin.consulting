@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useSubmit } from '@formspree/react';
 import { useRef, useState, type ReactNode, type FormEvent } from 'react';
 import { services, serviceTitle } from '@/content/services';
-import { site } from '@/content/site';
 import { inquirySchema, fieldErrors, timingOptions, type Submission } from '@/lib/inquiries/schema';
 import { track } from '@/lib/analytics/events';
 import { Arrow } from '../Arrow';
@@ -92,8 +91,7 @@ export function InquiryForm({ service, mock, publicEmail, formspreeId = '' }: { 
   }
   if (status === 'success') return <div data-inquiry-status="success" className={styles.form} role="status" tabIndex={-1} ref={element => element?.focus()}>
     <span className="eyebrow">Project request received</span><h2>Thanks for the details.</h2>
-    <p>Your project request has been accepted. I’ll review the details and follow up about the scope and next steps.</p>
-    <p>{site.responseWindowText}</p>
+    <p>Your project request has been received. I typically get back in 1-2 business days.</p>
     <div className="actions"><Link className="button" href="/how-it-works">What happens next <Arrow /></Link></div>
   </div>;
   return <form ref={formRef} className={styles.form} onSubmit={submit} noValidate onChange={() => {
@@ -110,7 +108,13 @@ export function InquiryForm({ service, mock, publicEmail, formspreeId = '' }: { 
       </div>
       <div className={styles.row}>
         <Field id="company" label="Agency / company" optional error={errors.company}><input {...props('company')} maxLength={150} autoComplete="organization" /></Field>
-        <Field id="website" label="Client website" optional error={errors.website}><input {...props('website')} type="text" inputMode="url" maxLength={2048} placeholder="example.com" autoComplete="url" /></Field>
+        <Field id="website" label="Client website" optional error={errors.website}><input {...props('website')} type="text" inputMode="url" maxLength={2048} placeholder="example.com" autoComplete="url" autoCapitalize="none" spellCheck={false} onChange={event => {
+          const input = event.currentTarget;
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          input.value = input.value.toLowerCase();
+          input.setSelectionRange(start, end);
+        }} /></Field>
       </div>
       <Field id="service" label="Main service" error={errors.service}><select {...props('service')} required defaultValue={service}><option value="not-sure">Not sure / help scoping</option>{services.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}</select></Field>
       <Field id="platforms" label="Platforms involved" optional hint="For example: CM360, Google Ads, GTM." error={errors.platforms}><input {...props('platforms', true)} maxLength={300} /></Field>
