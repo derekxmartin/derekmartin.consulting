@@ -88,7 +88,7 @@ test('signed receipt expires and rejects tampering, direct visits and production
   if (original === undefined) delete process.env.INQUIRY_DELIVERY; else process.env.INQUIRY_DELIVERY = original;
 });
 test('portfolio excludes fixtures and analytics defaults to no collection', () => {
-  assert.deepEqual(publishedCases(), []); assert.equal(getCase('layout-preview'), undefined);
+  assert.ok(publishedCases().some(entry => entry.slug === 'fieldwork-mechanical' && entry.inProgress)); assert.equal(getCase('layout-preview'), undefined);
   let events = 0; configureAnalytics(() => { events++; }, false);
   track('generate_lead', { form_id: 'project-inquiry', service_id: 'ga4-gtm' });
   assert.equal(events, 0); configureAnalytics(undefined, false);
